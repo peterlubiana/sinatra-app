@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>My First View!!</title>
+          <title>The Peoples News.</title>
     </head>
     <body>
-        <h1>Hello World</h1>
-        <p>This HTML code is inside of a '.erb' file in the views directory, where it belongs.</p>
+       <title>The Peoples News.</title>
+
+	    <h2> News Articles:</h2>
+	    <ul>
+	    <% @news.each do |news| %>
+            <li><%= news.title %></li>
+            <li><%= news.text %></li>
+            <li>Author: <%= news.author %></li>
+            
+        <% end %>
+        </ul>
+
+
+         <h2> Users of this app </h2>
+        <ul>
+        <% @users.each do |user| %>
+            <li><%= user.email %></li>
+        <% end %>
+	    </ul>
 
 
         <a href="/about"> About this page </a>
+        <a href="/createUser"> Create A new User </a>
+        <a href="/login"> Login </a>
     </body>
 </html>

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>My First View!!</title>
+        <title>The Important News.</title>
     </head>
     <body>
-        <h1>Hello World</h1>
-        <p>This HTML code is inside of a '.erb' file in the views directory, where it belongs.</p>
+       <title>The Important News.</title>
 
         <h2> Users of this app </h2>
         <ul>
@@ -15,6 +14,15 @@
 	    </ul>
 
 
+
+	    <h2> Users of this app </h2>
+	    <ul>
+	    <% @users.each do |user| %>
+            <li><%= user.email %></li>
+        <% end %>
+        </ul>
+
         <a href="/about"> About this page </a>
+        <a href="/login"> Login </a>
     </body>
 </html>
