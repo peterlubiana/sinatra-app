@@ -3,14 +3,14 @@ get '/frank-says' do
    'Put this in your pipe & smoke it!'
 end
   
-print("Hey")
+#print("Hey")
 
-def getModels()
+#def getModels()
 
-	val = 120
-	print(val + "hey")
+	#val = 120
+	#print(val + "hey")
 
-end
+#end
 
 get '/' do
   erb :index
