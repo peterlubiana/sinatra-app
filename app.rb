@@ -52,16 +52,20 @@ class NewsApp < Sinatra::Base
 	end
 
 
-	get('/newsArticle/:id') do
+	get('/newsArticle/:title') do
+		#code for fetching 1 piece of news
 	end
 
-	post('/newsArticle/:id') do
+	post('/newsArticle/:title') do
+		#code creating new news
 	end
 
-	put('/newsArticle/:id') do
+	put('/newsArticle/:title') do
+		#code for updating a piece of news
 	end
 
-	delete('/newsArticle/:id') do
+	delete('/newsArticle/:title') do
+		#code for deleting a piece of news
 	end
 
 end
