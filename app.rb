@@ -5,6 +5,7 @@ require './models/models.rb'
 class NewsApp < Sinatra::Base
 	enable :sessions
 
+
 	get '/' do
 	  @users = User.all
 	  @news = News.all
