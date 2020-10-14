@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_01_214530) do
+ActiveRecord::Schema.define(version: 2020_10_14_124427) do
 
   create_table "news", force: :cascade do |t|
     t.string "title"
@@ -19,11 +19,11 @@ ActiveRecord::Schema.define(version: 2020_10_01_214530) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
+    t.string "firstname"
     t.string "lastname"
     t.string "email"
-    t.string "password"
     t.string "news_articles"
+    t.string "password"
   end
 
 end

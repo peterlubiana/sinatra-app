@@ -1,4 +1,3 @@
 require './config/environment'
 
-
-run NewsApp
+run App
