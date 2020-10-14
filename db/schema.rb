@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2020_10_01_214530) do
     t.string "lastname"
     t.string "email"
     t.string "password"
+    t.string "news_articles"
   end
 
 end
