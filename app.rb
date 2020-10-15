@@ -76,33 +76,39 @@ class NewsApp < Sinatra::Base
 
 
 
-
-
-
-
-
-
 	# controller for newsarticles.
 
 	get('/newsArticle/:title') do
-		puts NewsArticle.where(title: params['title']).to_s
+		puts Newsarticle.where(title: params['title']).to_s
 	end
 
-	post('/newsArticle/:title') do
+	post('/newsArticle') do
 		#code creating new news
-		@users = User.All
+		@users = User.all
 
-    	newArticle = {title: params['title'], text: params['text'], author: params['author']}
-      	NewsArticle.create(newArticle)
+    	newArticle = {title: params['title'], text: params['text'], author: session['email']}
+      	Newsarticle.create(newArticle)
       	redirect '/'
 	end
 
 	put('/newsArticle/:title') do
 		@newsarticles = Newsarticle.all
 		#code for updating a piece of news
-		newArticle = {title: params['newtitle'], text: params['newtext'], author: session[:email]}
-    	NewsArticle.create(newArticle)
-    	redirect '/'
+		#puts params['title']
+		#puts session['email']
+		@newsarticles.each do |newsarticle|
+			puts newsarticle.title
+				puts params['title']
+				puts newsarticle.author
+				puts session['email']
+			if newsarticle.title ==  params['title'] and  newsarticle.author == session['email']
+
+				newArticleData = {title: params['newtitle'], text: params['newtext'], author: session['email']}
+				newsarticle.update(newArticleData)
+			end
+		end
+    	
+    	redirect '/' 
 	end
 
 	delete('/newsArticle/:title') do
@@ -111,10 +117,11 @@ class NewsApp < Sinatra::Base
 		@newsarticles.each do |newsarticle|
 			#puts params['title']
 			#puts newsarticle['title']
-			#puts session['email']
+		#	puts session['email']
 			#puts newsarticle['author']
-			if params['title'] == newsarticle.title and session['email'] == newsarticle.author
+			if params['title'] == newsarticle['title'] and session['email'] == newsarticle['author']
 				newsarticle.destroy
+				break
 			end
 		end
       	redirect '/'
