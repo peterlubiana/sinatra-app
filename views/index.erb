@@ -49,7 +49,7 @@
             <form method="POST" action="newsArticle"> 
                 <input name="title" placeholder="Title">
                 <input name="text" placeholder="Text">
-                <input hidden name="author" value="<%=session[:email]%>">
+                <input type="hidden" name="author" value="<%=session[:email]%>">
                 <input type="submit"/>
             </form>
             </ul>
@@ -60,20 +60,26 @@
             <h2> Your Articles </h2>
 
 
-            <% @newsarticles.each do |newsarticle| %>
-            <ul>
-                <form method="POST" action="newsArticle/<%=newsarticle[:title]%>"> 
-                    <input id="hidden" type="hidden" name="_method" value="PUT">
-                    <input name="newtitle" value="<%=newsarticle[:title]%>" placeholder="Title">
-                    <input name="newtext" value="<%=newsarticle[:text]%>" placeholder="Text">
-                    <input type="submit"/>
-                </form>
+            <% @newsarticles.each do |newsarticle| %> 
 
-                <form method="POST" action="newsArticle/<%=newsarticle[:title]%>"> 
-                    <input id="hidden" type="hidden" name="_method" value="DELETE">
-                    <input type="submit" value="Delete"/>
-                </form>
-            </ul>
+               <% if newsarticle.author == session['email'] %> 
+
+                
+                <ul>
+                    <form method="POST" action="newsArticle/<%=newsarticle[:title]%>"> 
+                        <input id="hidden" type="hidden" name="_method" value="PUT">
+                        <input name="newtitle" value="<%=newsarticle[:title]%>" placeholder="Title">
+                        <input name="newtext" value="<%=newsarticle[:text]%>" placeholder="Text">
+                        <input type="submit"/>
+                    </form>
+
+                    <form method="POST" action="newsArticle/<%=newsarticle[:title]%>"> 
+                        <input id="hidden" type="hidden" name="_method" value="DELETE">
+                        <input name="title" type="hidden" value="<%=newsarticle[:title]%>" placeholder="Title">
+                        <input type="submit" value="Delete"/>
+                    </form>
+                </ul>
+                <% end %>
             <% end %>
 
 
