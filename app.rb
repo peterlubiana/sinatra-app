@@ -4,10 +4,11 @@ require './models/models.rb'
 
 class NewsApp < Sinatra::Base
 	enable :sessions
+	set :public_folder, 'public'
 
 	get '/' do
 	  @users = User.all
-	  @news = News.all
+	  @newsarticles = Newsarticle.all
 	  erb :index
 	end
 
@@ -25,7 +26,7 @@ class NewsApp < Sinatra::Base
 	post('/login') do
 	  @users.each do |user|
 		if params['email'] == user.email && params['password'] == user.password
-		  session[email] = true
+		  session[email] = params['email']
 		else
 		  redirect '/login'
 		end
@@ -39,13 +40,14 @@ class NewsApp < Sinatra::Base
 	post('/createUser') do
       @users = User.all
 
+      # Check if there already is a user with the email
       @users.each do |user|
       	if params['email'] == user.email 
-	   	  puts 'email is not unique!'
+	   	 # puts 'email is not unique!'
 	   	  break
 	   	else
-	   	  puts 'User was created ' << user.email << ' was created'
-	   	  puts '<a href="/"> Back to main page. </a>'
+	   	  #puts 'User was created ' << user.email << ' was created'
+	   	 # puts '<a href="/"> Back to main page. </a>'
 	   	end
 	  end
 	  

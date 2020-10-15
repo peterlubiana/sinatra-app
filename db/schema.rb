@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2020_10_01_214530) do
 
-  create_table "news", force: :cascade do |t|
+  create_table "newsarticles", force: :cascade do |t|
     t.string "title"
     t.string "text"
     t.string "author"
@@ -23,7 +23,6 @@ ActiveRecord::Schema.define(version: 2020_10_01_214530) do
     t.string "lastname"
     t.string "email"
     t.string "password"
-    t.string "newsArticles"
   end
 
 end
