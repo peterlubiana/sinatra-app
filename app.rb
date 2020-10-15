@@ -41,11 +41,11 @@ class NewsApp < Sinatra::Base
 		if params['email'] == user.email && params['password'] == user.password
 		  session['email'] = params['email']
 		  redirect '/'
-		else
-		  @failedLogin = true
-		  erb :login
 		end
 	  end
+
+	  redirect '/login'
+
 	end
 
 	get('/createUser') do
