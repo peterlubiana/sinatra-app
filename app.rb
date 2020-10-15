@@ -6,6 +6,8 @@ class NewsApp < Sinatra::Base
 	enable :sessions
 	set :public_folder, 'public'
 
+
+
 	get '/' do
 	  @users = User.all
 	  @newsarticles = Newsarticle.all
@@ -18,17 +20,30 @@ class NewsApp < Sinatra::Base
 	end
 
 
+
+
+
+	get('/logout') do
+		session['email'] = nil
+		redirect '/'
+	end
+
+
 	get('/login') do
 		erb :login
 	end
 
 
 	post('/login') do
+      @users = User.all
+
 	  @users.each do |user|
 		if params['email'] == user.email && params['password'] == user.password
-		  session[email] = params['email']
+		  session['email'] = params['email']
+		  redirect '/'
 		else
-		  redirect '/login'
+		  @failedLogin = true
+		  erb :login
 		end
 	  end
 	end
@@ -41,33 +56,68 @@ class NewsApp < Sinatra::Base
       @users = User.all
 
       # Check if there already is a user with the email
+      userexists = false
       @users.each do |user|
       	if params['email'] == user.email 
-	   	 # puts 'email is not unique!'
-	   	  break
-	   	else
-	   	  #puts 'User was created ' << user.email << ' was created'
-	   	 # puts '<a href="/"> Back to main page. </a>'
+      	    userexists = true
 	   	end
 	  end
+
+	  if userexists 
+	  	redirect '/createUser'
+	  else
+	  	newUser = {name: params['name'], lastname: params['lastname'], email: params['email'],password:params['password']}
+      	User.create(newUser)
+      	redirect '/login'
+      end
 	  
 	end
 
 
+
+
+
+
+
+
+
+
+	# controller for newsarticles.
+
 	get('/newsArticle/:title') do
-		#code for fetching 1 piece of news
+		puts NewsArticle.where(title: params['title']).to_s
 	end
 
 	post('/newsArticle/:title') do
 		#code creating new news
+		@users = User.All
+
+    	newArticle = {title: params['title'], text: params['text'], author: params['author']}
+      	NewsArticle.create(newArticle)
+      	redirect '/'
 	end
 
 	put('/newsArticle/:title') do
+		@newsarticles = Newsarticle.all
 		#code for updating a piece of news
+		newArticle = {title: params['newtitle'], text: params['newtext'], author: session[:email]}
+    	NewsArticle.create(newArticle)
+    	redirect '/'
 	end
 
 	delete('/newsArticle/:title') do
+		@newsarticles = Newsarticle.all
 		#code for deleting a piece of news
+		@newsarticles.each do |newsarticle|
+			#puts params['title']
+			#puts newsarticle['title']
+			#puts session['email']
+			#puts newsarticle['author']
+			if params['title'] == newsarticle.title and session['email'] == newsarticle.author
+				newsarticle.destroy
+			end
+		end
+      	redirect '/'
 	end
 
 end

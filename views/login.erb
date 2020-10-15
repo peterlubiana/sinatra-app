@@ -7,6 +7,10 @@
     <body>
         <h1>Log into the webpage.</h1>
         
+        <% if defined?(@failedLogin) and @failedLogin == true %>
+            <p> Log in failed </p>
+        <% end %> 
+
         <form method="post" action="/login">
         	<input type="text" name="email"/> 
         	<input type="password" name="password"/> 
