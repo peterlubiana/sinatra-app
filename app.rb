@@ -2,13 +2,15 @@ require_relative 'config/environment'
 require './models/models.rb'
 
 
-class App < Sinatra::Base
+class NewsApp < Sinatra::Base
 	enable :sessions
+	set :public_folder, 'public'
+
 
 
 	get '/' do
 	  @users = User.all
-	  @news = News.all
+	  @newsarticles = Newsarticle.all
 	  erb :index
 	end
 
@@ -18,19 +20,32 @@ class App < Sinatra::Base
 	end
 
 
+
+
+
+	get('/logout') do
+		session['email'] = nil
+		redirect '/'
+	end
+
+
 	get('/login') do
 		erb :login
 	end
 
 
 	post('/login') do
+      @users = User.all
+
 	  @users.each do |user|
 		if params['email'] == user.email && params['password'] == user.password
-		  session[email] = true
-		else
-		  redirect '/login'
+		  session['email'] = params['email']
+		  redirect '/'
 		end
 	  end
+
+	  redirect '/login'
+
 	end
 
 	get('/createUser') do
@@ -40,33 +55,76 @@ class App < Sinatra::Base
 	post('/createUser') do
       @users = User.all
 
+      # Check if there already is a user with the email
+      userexists = false
       @users.each do |user|
       	if params['email'] == user.email 
-	   	  puts 'email is not unique!'
-	   	  break
-	   	else
-	   	  puts 'User was created ' << user.email << ' was created'
-	   	  puts '<a href="/"> Back to main page. </a>'
+      	    userexists = true
 	   	end
 	  end
+
+	  if userexists 
+	  	redirect '/createUser'
+	  else
+	  	newUser = {name: params['name'], lastname: params['lastname'], email: params['email'],password:params['password']}
+      	User.create(newUser)
+      	redirect '/login'
+      end
 	  
 	end
 
 
+
+
+	# controller for newsarticles.
+
 	get('/newsArticle/:title') do
-		#code for fetching 1 piece of news
+		puts Newsarticle.where(title: params['title']).to_s
 	end
 
-	post('/newsArticle/:title') do
+	post('/newsArticle') do
 		#code creating new news
+		@users = User.all
+
+    	newArticle = {title: params['title'], text: params['text'], author: session['email']}
+      	Newsarticle.create(newArticle)
+      	redirect '/'
 	end
 
 	put('/newsArticle/:title') do
+		@newsarticles = Newsarticle.all
 		#code for updating a piece of news
+		#puts params['title']
+		#puts session['email']
+		@newsarticles.each do |newsarticle|
+			puts newsarticle.title
+				puts params['title']
+				puts newsarticle.author
+				puts session['email']
+			if newsarticle.title ==  params['title'] and  newsarticle.author == session['email']
+
+				newArticleData = {title: params['newtitle'], text: params['newtext'], author: session['email']}
+				newsarticle.update(newArticleData)
+			end
+		end
+    	
+    	redirect '/' 
 	end
 
 	delete('/newsArticle/:title') do
+		@newsarticles = Newsarticle.all
 		#code for deleting a piece of news
+		@newsarticles.each do |newsarticle|
+			#puts params['title']
+			#puts newsarticle['title']
+		#	puts session['email']
+			#puts newsarticle['author']
+			if params['title'] == newsarticle['title'] and session['email'] == newsarticle['author']
+				newsarticle.destroy
+				break
+			end
+		end
+      	redirect '/'
 	end
 
 end

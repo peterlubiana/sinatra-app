@@ -1,3 +1,5 @@
 require './config/environment'
 
-run App
+use Rack::MethodOverride
+
+run NewsApp
